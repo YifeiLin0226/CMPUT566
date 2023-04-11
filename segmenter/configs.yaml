@@ -1,0 +1,34 @@
+dataset:
+  Pascal_VOC12:
+    batch_size: 16
+    img_size: 512
+    learning_rate: 0.001
+
+model:
+  segmenter_base_16_linear:
+    mask: false
+    pretrained_link: hf_hub:timm/vit_base_patch16_384.augreg_in21k_ft_in1k
+    num_layers: 12
+    d_model: 768
+    num_heads: 12
+  
+  segmenter_base_16_mask:
+    mask: true
+    pretrained_link: hf_hub:timm/vit_base_patch16_384.augreg_in21k_ft_in1k
+    num_layers: 12
+    d_model: 768
+    num_heads: 12
+
+  segmenter_small_16_linear:
+    mask: false
+    pretrained_link: hf_hub:timm/vit_small_patch16_384.augreg_in21k_ft_in1k
+    num_layers: 12
+    d_model: 384
+    num_heads: 6
+
+  segmenter_small_16_linear:
+    mask: true
+    pretrained_link: hf_hub:timm/vit_small_patch16_384.augreg_in21k_ft_in1k
+    num_layers: 12
+    d_model: 384
+    num_heads: 6
