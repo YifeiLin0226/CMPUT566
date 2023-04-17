@@ -1,0 +1,3 @@
+[submodule "MatrixDecomp/Synchronized-BatchNorm-PyTorch"]
+	path = MatrixDecomp/Synchronized-BatchNorm-PyTorch
+	url = https://github.com/vacancy/Synchronized-BatchNorm-PyTorch
