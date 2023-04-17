@@ -1,5 +1,5 @@
 # cmput566 Final Project
-Please install the following dependencies by
+Please install the dependencies by
 ```
 pip install -r requirements.txt
 ```
