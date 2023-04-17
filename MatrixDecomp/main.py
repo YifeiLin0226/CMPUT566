@@ -157,7 +157,7 @@ if __name__ == '__main__':
     # parse the config
     parser = argparse.ArgumentParser(description='Train the HamNet')
     # parse lr
-    parser.add_argument('--lr', type = float, default = 5e-6, help = 'The learning rate')
+    parser.add_argument('--lr', type = float, default = 1e-6, help = 'The learning rate')
     # parse num_epochs
     parser.add_argument('--num_epochs', type = int, default = 10, help = 'The number of epochs')
     # parse batch_size
