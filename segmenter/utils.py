@@ -69,7 +69,7 @@ def sliding_window(image, window_size, window_stride):
     windows['shape'] = (H, W)
     return windows
 
-def merge_windows(windows, window_size, ori_shape):
+def merge_windows(windows, window_size):
     seg_maps = windows['seg_maps']
     anchors = windows['anchors']
     n_cls = seg_maps.shape[1]
@@ -84,7 +84,7 @@ def merge_windows(windows, window_size, ori_shape):
     # logits = F.interpolate(logits.unsqueeze(0), ori_shape, mode = 'bilinear')[0]
     return logits
 
-def inference(model, n_cls, image, ori_shape, window_size, window_stride):
+def inference(model, n_cls, image, window_size, window_stride):
     image = resize(image, window_size)
     windows = sliding_window(image, window_size, window_stride)
     crops = torch.stack(windows['crop'])[:, 0]
@@ -95,25 +95,12 @@ def inference(model, n_cls, image, ori_shape, window_size, window_stride):
             seg_maps[i: i + 1] = model(crops[i : i + 1])
     
     windows['seg_maps'] = seg_maps
-    img_seg_map = merge_windows(windows, window_size, ori_shape)
+    img_seg_map = merge_windows(windows, window_size)
     img_cls_map = img_seg_map.argmax(dim = 0, keepdim = True)
     return img_cls_map
 
 
-def visualize(image, label, img_cls_map, n_cls, palette):
-    label_color_map = np.zeros(image.shape[1:]).transpose(1, 2, 0)
-    pred_color_map = np.zeros(image.shape[1:]).transpose(1, 2, 0)
-    label = label.cpu().numpy()
-    for cls in range(n_cls):
-        color = palette[cls]
-        indices_label = label == cls
-        label_color_map[indices_label[0], :] = color
-        indices_pred = img_cls_map == cls
-        pred_color_map[indices_pred[0], :] = color
-    label_color_map = label_color_map.astype(np.uint8)
-    pred_color_map = pred_color_map.astype(np.uint8)
-    label_color_img = Image.fromarray(label_color_map)
-    pred_color_img = Image.fromarray(pred_color_map)
+
 
 
 

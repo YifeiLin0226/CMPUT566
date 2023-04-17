@@ -26,7 +26,7 @@ model:
     d_model: 384
     num_heads: 6
 
-  segmenter_small_16_linear:
+  segmenter_small_16_mask:
     mask: true
     pretrained_link: hf_hub:timm/vit_small_patch16_384.augreg_in21k_ft_in1k
     num_layers: 12
