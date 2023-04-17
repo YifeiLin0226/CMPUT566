@@ -26,8 +26,8 @@ from .sync_bn.nn.modules import SynchronizedBatchNorm2d
 def validation(model, val_loader, n_cls, device = 'cpu'):
     mious = []
     for batch in val_loader:
-        image, label, ori_shape = batch['img'].to(device), batch['gt_semantic_seg'].squeeze(1).to(device), batch['img_metas']['ori_shape'][:2]
-        img_cls_map = utils.inference(model, n_cls, image, ori_shape, 512, 512)
+        image, label= batch['img'].to(device), batch['gt_semantic_seg'].squeeze(1).to(device)
+        img_cls_map = utils.inference(model, n_cls, image, 512, 512)
         miou = utils.miou(img_cls_map.to(device), label, n_cls)
         mious.append(miou)
 
@@ -36,8 +36,8 @@ def validation(model, val_loader, n_cls, device = 'cpu'):
 @torch.no_grad()
 def plot_color_map(model, loader, n_cls, palette, output_dir, device = 'cpu'):
     for i, batch in enumerate(loader):
-        image, label, ori_shape = batch['img'].to(device), batch['gt_semantic_seg'].squeeze(1), batch['img_metas']['ori_shape'][:2]
-        img_cls_map = utils.inference(model, n_cls, image, ori_shape, 512, 512)
+        image, label= batch['img'].to(device), batch['gt_semantic_seg'].squeeze(1)
+        img_cls_map = utils.inference(model, n_cls, image,512, 512)
         label_color_map = np.zeros(image.shape[1:]).transpose(1, 2, 0)
         pred_color_map = np.zeros(image.shape[1:]).transpose(1, 2, 0)
         for cls in range(n_cls):
@@ -62,16 +62,6 @@ def plot_color_map(model, loader, n_cls, palette, output_dir, device = 'cpu'):
         plt.close()
 
 
-def remove_bn_layers(model):
-    for name, module in model.named_children():
-        if isinstance(module, SynchronizedBatchNorm2d) or isinstance(module, nn.BatchNorm2d):
-            # Remove the BatchNorm layer from the parent module
-            module.track_running_stats = False
-        elif isinstance(module, nn.Module):
-            # Recursively remove BatchNorm layers from child modules
-            remove_bn_layers(module)
-
-
 
 def train(num_layers, lr, num_epochs = 10,  batch_size = 8, device = 'cpu', parallel = False):
     # Create the dataset
@@ -92,13 +82,6 @@ def train(num_layers, lr, num_epochs = 10,  batch_size = 8, device = 'cpu', para
     if parallel and torch.cuda.device_count() > 1:
         hamNet = nn.DataParallel(hamNet)
 
-    #     for param in hamNet.module.backbone.parameters():
-    #         param.requires_grad = False
-    #     #remove_bn_layers(hamNet.module)
-    #else:
-    #     for param in hamNet.backbone.parameters():
-    #         param.requires_grad = False
-    #     #remove_bn_layers(hamNet)
         
 
     

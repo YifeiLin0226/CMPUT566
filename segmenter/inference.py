@@ -5,8 +5,6 @@ import os
 
 import numpy as np
 import torch
-import torch.nn as nn
-import torch.optim as optim
 from torch.utils.data import DataLoader
 from timm.models import create_model
 import matplotlib.pyplot as plt
@@ -50,8 +48,9 @@ def inference(model_name, pretrained_link, num_layers, d_model, num_heads, mask,
     state_dict = torch.load(model_path, map_location = device)
     new_state_dict = {}
     for k, v in state_dict.items():
-        name = k[7:]
-        new_state_dict[name] = v
+        if k.startswith('module.'):
+            k = k[7:]
+        new_state_dict[k] = v
     segmenter.load_state_dict(new_state_dict)
     segmenter.eval()
     output_dir = Path(__file__).parent / 'test_outputs' / model_name

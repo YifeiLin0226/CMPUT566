@@ -1,5 +1,5 @@
 /dataset
 /venv
-/MatrixDecomp/pretrained
-/segmenter/checkpoints
-/MatrixDecomp/checkpoints
+/MatrixDecomp/pretrained/*
+/segmenter/checkpoints/*
+/MatrixDecomp/checkpoints/*

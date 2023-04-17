@@ -27,8 +27,8 @@ from data.pascal_voc12 import PascalVOC
 def validation(segmenter, val_loader, n_cls, device = 'cpu'):
     mious = []
     for batch in val_loader:
-        image, label, ori_shape = batch['img'].to(device), batch['gt_semantic_seg'].squeeze(1).to(device), batch['img_metas']['ori_shape'][:2]
-        img_cls_map = utils.inference(segmenter, n_cls, image, ori_shape, 512, 512)
+        image, label = batch['img'].to(device), batch['gt_semantic_seg'].squeeze(1).to(device)
+        img_cls_map = utils.inference(segmenter, n_cls, image, 512, 512)
         miou = utils.miou(img_cls_map.to(device), label, n_cls)
         mious.append(miou)
     return np.mean(mious)
