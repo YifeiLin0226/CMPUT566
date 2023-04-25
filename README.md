@@ -2,9 +2,13 @@
 # Semantic Segmentation #
 ## Yifei Lin 1533788 ##
 
+## Wentao Xie 1781087
+
+
+
 ![alt text](inference.jpg)
 
-The output colormaps on validation dataset are saved in **/segmenter/val_outputs** and **/MatrixDecomp/val_outputs** respectively.
+The output colormaps on validation dataset are saved in **/segmenter/val_outputs**, **convnext/val_outputs** and **/MatrixDecomp/val_outputs** respectively.
 
 Please install the dependencies by
 ```
@@ -90,7 +94,34 @@ After downloading the **PASCALVOC 2012** dataset, please put **VOCdevkit** insid
 
     --device: Set to be cuda if running on a GPU(default: cpu)
 
+## ConvNeXt
 
+- ### Build environment
 
+```
+cd convnext
+pip install -r requirements.txt
 
+```
 
+- ### Training and Validation
+
+```
+python -m convnext.main [options]
+```
+
+Options:
+
+--lr: Learning rate (default: 1e-4)
+
+--num_epochs: (default: 100)
+
+--batch_size: (default: 16)
+
+--device: Set to be cuda if running on a GPU(default: cpu) 
+
+--parallel: Use multi-GPUs (default: False)
+
+--model_name: the model used to train, choices: ['convnext-T','convnext-S','convnext-B']
+
+--pretrained_address: the address for the pretrained ConvNeXt backbone. Link:https://github.com/facebookresearch/ConvNeXt
